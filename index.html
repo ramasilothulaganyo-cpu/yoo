@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be My Valentine?</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff5f9e, #ff85c2, #ffd1e8);
+  overflow: hidden;
+  position: relative;
+}
+
+/* BIG HEART BACKGROUND */
+.big-heart {
+  position: absolute;
+  font-size: 300px;
+  opacity: 0.12;
+  animation: pulse 6s infinite ease-in-out;
+  pointer-events: none;
+}
+.heart1 { top: 10%; left: 15%; }
+.heart2 { bottom: 5%; right: 10%; }
+.heart3 { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* SLIDES */
+.slide {
+  display: none;
+  text-align: center;
+  background: white;
+  padding: 45px;
+  border-radius: 25px;
+  box-shadow: 0 20px 40px rgba(255, 77, 109, 0.35);
+  width: 85%;
+  max-width: 550px;
+  z-index: 2;
+}
+.slide.active { display: block; }
+
+/* PHOTOS */
+.photo {
+  width: 260px;
+  border-radius: 25px;
+  box-shadow: 0 15px 30px rgba(255, 0, 100, 0.4);
+  margin-bottom: 25px;
+}
+
+/* GALLERY */
+.gallery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.gallery img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  margin: 10px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(255,0,100,0.35);
+  transition: transform 0.3s;
+}
+.gallery img:hover {
+  transform: scale(1.1);
+}
+
+/* BUTTONS */
+button {
+  padding: 14px 30px;
+  font-size: 17px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  margin-top: 25px;
+  color: white;
+}
+
+#yesBtn {
+  background: linear-gradient(135deg, #ff4d6d, #ff85c2);
+}
+
+#noBtn {
+  background: #adb5bd;
+  position: relative;
+}
+
+/* NEXT BUTTON */
+.romantic-btn {
+  background: linear-gradient(135deg, #ff4d6d, #ff9ac6);
+  border-radius: 50px;
+  padding: 16px 38px;
+  font-size: 18px;
+  box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+}
+
+/* NO MESSAGE */
+.no-message {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #ff4d6d;
+  min-height: 22px;
+}
+
+/* LOVE TEXT */
+.love-text {
+  font-size: 18px;
+  color: #ff4d6d;
+  margin-top: 20px;
+  min-height: 28px;
+}
+
+/* FLOATING HEARTS & ROSES */
+.floating {
+  position: absolute;
+  animation: floatUp 5s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+}
+
+/* BIG BOUQUET */
+.bouquet {
+  font-size: 40px;
+  line-height: 1.2;
+  margin-bottom: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="big-heart heart1">❤️</div>
+<div class="big-heart heart2">💗</div>
+<div class="big-heart heart3">💖</div>
+
+<!-- SLIDE 1 -->
+<div class="slide active">
+  <h1>Will you be my Valentine? 💕</h1>
+  <img src="her.jpeg" class="photo">
+
+  <div>
+    <button id="yesBtn">Yes 😍</button>
+    <button id="noBtn">No 😢</button>
+  </div>
+
+  <div class="no-message" id="noMessage"></div>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide">
+  <h2>Our Beautiful Memories 💞</h2>
+  <div class="gallery">
+    <img src="us1.jpeg">
+    <img src="us2.jpeg">
+    <img src="us3.jpeg">
+    <img src="us4.jpeg">
+  </div>
+  <button id="nextSlide" class="romantic-btn">Relive Our Love 💞</button>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide">
+  <h1>💖 I LOVE YOU BUBU 💖</h1>
+  <h2>#Always & Forever 💍</h2>
+
+  <!-- BIG BOUQUET OF ROSES -->
+  <div class="bouquet">
+    🌹🌹🌹🌹🌹<br>
+    🌹🌹🌹🌹🌹<br>
+    🌹🌹🌹🌹🌹<br>
+    🌹🌹🌹🌹🌹
+  </div>
+
+  <p id="loveText" class="love-text"></p>
+</div>
+
+<!-- MUSIC -->
+<audio id="music" loop preload="auto">
+  <source src="wait for you.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const nextSlide = document.getElementById('nextSlide');
+const music = document.getElementById('music');
+const noMessage = document.getElementById('noMessage');
+const loveText = document.getElementById('loveText');
+
+const messages = [
+  "Really? 🥺",
+  "Are you sure? 💔",
+  "Think again 😢",
+  "My heart can’t take this 💔",
+  "Okay… last chance 😭"
+];
+
+const text = "You make my world softer, warmer, and brighter every day 🌹";
+let noCount = 0;
+
+/* MUSIC FADE IN */
+document.body.addEventListener('click', () => {
+  music.volume = 0;
+  music.play();
+  let v = 0;
+  const fade = setInterval(() => {
+    v += 0.02;
+    music.volume = Math.min(v, 1);
+    if (v >= 1) clearInterval(fade);
+  }, 80);
+}, { once: true });
+
+/* NO BUTTON */
+noBtn.addEventListener('mouseover', () => {
+  noMessage.textContent = messages[Math.min(noCount, messages.length - 1)];
+  noCount++;
+  noBtn.style.left = Math.random() * 200 + 'px';
+  noBtn.style.top = Math.random() * 60 + 'px';
+});
+
+/* SLIDES */
+yesBtn.addEventListener('click', () => {
+  slides[0].classList.remove('active');
+  slides[1].classList.add('active');
+});
+
+nextSlide.addEventListener('click', () => {
+  slides[1].classList.remove('active');
+  slides[2].classList.add('active');
+  createLove();
+  typeLoveText();
+});
+
+/* TYPING EFFECT */
+function typeLoveText() {
+  let i = 0;
+  loveText.textContent = "";
+  const typing = setInterval(() => {
+    loveText.textContent += text.charAt(i);
+    i++;
+    if (i >= text.length) clearInterval(typing);
+  }, 60);
+}
+
+/* HEARTS + ROSES */
+function createLove() {
+  setInterval(() => {
+    const item = document.createElement('div');
+    item.className = 'floating';
+    item.innerHTML = ['❤️','💖','💗','💕','🌹','🌹'][Math.floor(Math.random()*6)];
+    item.style.left = Math.random() * window.innerWidth + 'px';
+    item.style.top = window.innerHeight + 'px';
+    item.style.fontSize = (22 + Math.random()*28) + 'px';
+    document.body.appendChild(item);
+    setTimeout(() => item.remove(), 5000);
+  }, 150);
+}
+</script>
+
+</body>
+</html>
